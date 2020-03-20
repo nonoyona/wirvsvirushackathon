@@ -15,6 +15,7 @@ public class TestHandler implements Handler {
         if(body == null) {
             ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Arguments were not formatted correctly"));
         }else{
+            
             ctx.status(HttpStatus.OK_200).json(new TestResponse());
         }
     }
