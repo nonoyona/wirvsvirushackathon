@@ -3,12 +3,18 @@
  */
 package SickOrNotBackend;
 
+import SickOrNotBackend.request.handlers.TestHandler;
+import io.javalin.Javalin;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        Javalin app = Javalin.create().start(8080);
+        app.get("/", new TestHandler());
+
+
     }
 }
