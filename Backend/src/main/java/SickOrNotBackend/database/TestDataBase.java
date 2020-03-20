@@ -7,15 +7,16 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import SickOrNotBackend.datatypes.*;
 
 public class TestDataBase {
     private MongoClient mongoClient;
-    private DBCollection collection;
+    private MongoCollection<Case> collection;
     private DB database;
     private String databaseName = "test";
 
     public TestDataBase() throws UnknownHostException {
-        mongoClient = new MongoClient("localhost", 27017);
+        mongoClient = new MongoClient("db02.dev.schaefkn.com", 27017);
         database = mongoClient.getDB(databaseName);
         collection = database.createCollection("testresults", null);
     }

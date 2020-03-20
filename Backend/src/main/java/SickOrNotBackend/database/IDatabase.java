@@ -26,4 +26,6 @@ public interface IDatabase {
      * @throws NullpointerException if no case wit id [id] exists
      */
     public HealthType getState(String id);
+
+    
 }
