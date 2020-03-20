@@ -8,13 +8,13 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 
-public class TestDataBase {
+public class DataBase {
     private MongoClient mongoClient;
     private DBCollection collection;
     private DB database;
     private String databaseName = "test";
 
-    public TestDataBase() throws UnknownHostException {
+    public DataBase() throws UnknownHostException {
         mongoClient = new MongoClient("localhost", 27017);
         database = mongoClient.getDB(databaseName);
         collection = database.createCollection("testresults", null);
