@@ -15,6 +15,6 @@ public class App {
         Javalin app = Javalin.create().start(8080);
         app.get("/", new TestHandler());
 
-
+        
     }
 }
