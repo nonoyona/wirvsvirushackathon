@@ -32,6 +32,8 @@ public class TestResultRegisteringHandler implements Handler {
             } else {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BodyFormatErrorResponse());
             }
+        }else{
+            ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));
         }
     }
 }
