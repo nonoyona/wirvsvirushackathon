@@ -76,8 +76,8 @@ public class NewDatabase implements IDatabase {
             throw new NullPointerException("No Case with id found");
         }
         try {
-            return new Case(doc.getString("location"), doc.getDate("date"),
-                    TestResult.valueOf(doc.getString("health")), doc.getString("number"));
+            return new Case(doc.getString("number"), doc.getString("username"), doc.getDate("date"), doc.getString("location"),
+                    TestResult.valueOf(doc.getString("health")));
         } catch (ClassCastException e) {
             //Should not happen because this database contains only Cases
             assert false;
