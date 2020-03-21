@@ -1,6 +1,8 @@
 
 package SickOrNotBackend.authentication;
 
+import java.security.AccessControlException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +14,7 @@ import com.mongodb.client.model.Updates;
 
 import org.bson.Document;
 
+import SickOrNotBackend.authentication.Crypto.HashData;
 import SickOrNotBackend.datatypes.AuthData;
 import SickOrNotBackend.datatypes.AuthRoll;
 
@@ -31,14 +34,28 @@ public class NewAuthentication implements IAuthentication {
 
     @Override
     public String getJsonWebToken(String username, String password) {
-        // TODO Auto-generated method stub
+        var data = this.getAuthDataByUsername(username);
+        try {
+            if (Crypto.checkPassword(password, new HashData(data.passwordHash, data.passwordSalt))) {
+                var result = JWTHandler.createJWT(data.username, data.roll, 60 * 1000 * 15);
+                return result;
+            }
+            
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public AuthData getAuthData(String jsonWebToken) {
         var data = JWTHandler.getJWTData(jsonWebToken);
-        var result = collection.find(Filters.eq("username", data.username));
+        return getAuthDataByUsername(data.username);
+    }
+
+    private AuthData getAuthDataByUsername(String username) {
+        var result = collection.find(Filters.eq("username", username));
 
         var doc = result.first();
         if (doc == null) {
@@ -51,7 +68,10 @@ public class NewAuthentication implements IAuthentication {
 
     @Override
     public void setAuthRoll(String username, AuthRoll roll) {
-        this.collection.updateOne(Filters.eq("username", username), Updates.set(fieldName, value))
+        var result = this.collection.updateOne(Filters.eq("username", username), Updates.set("roll", roll.toString()));
+        if (result.getModifiedCount() < 1) {
+            throw new NullPointerException("This username does not exist in the database");
+        }
     }
 
     @Override
@@ -65,7 +85,14 @@ public class NewAuthentication implements IAuthentication {
 
     @Override
     public void changePassword(String username, String newPassword) {
-        
+        try {
+            var crypto = Crypto.hashPassword(newPassword);
+            var result = this.collection.updateOne(Filters.eq("username", username), Updates
+                    .combine(Updates.set("passwordHash", crypto.password), Updates.set("passwordSalt", crypto.salt)));
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Give feedback that it didnt work
+        }
+
     }
 
     @Override

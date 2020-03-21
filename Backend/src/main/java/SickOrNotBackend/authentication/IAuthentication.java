@@ -40,8 +40,11 @@ public interface IAuthentication {
      * 
      * The caller of this function must be an ADMIN
      * 
+     * REQUIRES user with given webtoken exists in database
+     * 
      * @param username username
      * @param roll the roll that should be assigned to the user
+     * @throws NullPointerException if no user with that token exists
      */
     public void setAuthRoll(String username, AuthRoll roll);
 
