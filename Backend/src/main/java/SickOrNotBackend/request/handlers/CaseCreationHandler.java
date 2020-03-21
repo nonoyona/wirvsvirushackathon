@@ -27,11 +27,11 @@ public class CaseCreationHandler implements Handler {
             if (caseBody == null) {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
             } else {
-                Case c = new Case(caseBody.location, caseBody.date, TestResult.UNTESTED, UUID.randomUUID().toString());
+                Case c = new Case(UUID.randomUUID().toString(), data.username, caseBody.date, caseBody.location, TestResult.UNTESTED);
                 if (!App.database.insertCase(c)) {
                     ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Data is not saved!"));
                 }
-                ctx.status(HttpStatus.OK_200).json(c.number);
+                ctx.status(HttpStatus.OK_200).json(c.id);
             }
         }else{
             ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));

@@ -6,15 +6,17 @@ import java.util.Date;
  * Case
  */
 public class Case {
-    public String location;
+    public String id;
+    public String username;
     public Date date;
+    public String location;
     public TestResult health;
-    public String number;
 
-    public Case(String location, Date date, TestResult health, String number) {
-        this.location = location;
+    public Case(String id, String username, Date date, String location, TestResult testResult) {
+        this.id = id;
+        this.username = username;
         this.date = date;
-        this.health = health;
-        this.number = number;
+        this.location = location;
+        this.health = testResult;
     }
 }
