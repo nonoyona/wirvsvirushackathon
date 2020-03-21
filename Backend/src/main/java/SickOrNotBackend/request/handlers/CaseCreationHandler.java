@@ -21,8 +21,8 @@ public class CaseCreationHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        AuthRoll authRoll = JWTHandler.getAuthRollByContext(ctx);
-        if (authRoll == AuthRoll.ADMIN || authRoll == AuthRoll.INSTITUTION) {
+        JWTHandler.JWTData data = JWTHandler.getJWTDataByContext(ctx);
+        if (data.roll == AuthRoll.ADMIN || data.roll == AuthRoll.INSTITUTION) {
             CaseCreationBody caseBody = ctx.bodyValidator(CaseCreationBody.class).getOrNull();
             if (caseBody == null) {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
