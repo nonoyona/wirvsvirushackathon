@@ -23,7 +23,7 @@ public class TestResultReceivingHandler implements Handler {
             TestResult health = App.database.getState(id);
             ctx.status(HttpStatus.OK_200).json(new GetResultResponse(health));
         }else{
-            ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("There is no case for the given id!"));
+            ctx.status(HttpStatus.NOT_FOUND_404).json(new BadRequestResponse("There is no case for the given id!"));
         }
     }
 
