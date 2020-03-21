@@ -50,4 +50,9 @@ public class Database implements IDatabase {
     public HealthType getState(String id) {
         return null;
     }
+
+    @Override
+    public boolean caseExists(String id) {
+        return false;
+    }
 }
