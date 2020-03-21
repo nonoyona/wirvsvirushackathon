@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * CaseBody
  */
-public class CreateCaseBody {
+public class CaseCreationBody {
     public String location;
     public Date date;
 }

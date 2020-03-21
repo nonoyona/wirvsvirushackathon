@@ -45,7 +45,7 @@ public interface IDatabase {
      * @param id case id
      * @throws NullPointerException if no case with [id] exists
      */
-    public void updateHealthStatus(TestResult status, String id);
+    public void registerTestResult(TestResult status, String id);
 
     /**
      * Gets a case with id [id]

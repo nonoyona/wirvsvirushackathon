@@ -63,8 +63,8 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public void updateHealthStatus(TestResult status, String id) {
-        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", status));
+    public void registerTestResult(TestResult testResult, String id) {
+        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", testResult));
         if (result.getModifiedCount() < 1) {
             throw new NullPointerException("No Case with id found");
         }
@@ -78,11 +78,11 @@ public class NewDatabase implements IDatabase {
             throw new NullPointerException("No Case with id found");
         }
         try {
-            Case c = new Case(doc.getString("location"), doc.getDate("date"),
+            return new Case(doc.getString("location"), doc.getDate("date"),
                     TestResult.valueOf(doc.getString("health")), doc.getString("number"));
-            return c;
         } catch (ClassCastException e) {
-            //Shuld not happen because this database contains only Cases
+            //Should not happen because this database contains only Cases
+            assert false;
             return null;
         }
     }
