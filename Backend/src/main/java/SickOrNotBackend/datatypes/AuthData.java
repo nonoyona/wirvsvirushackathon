@@ -17,7 +17,7 @@ public class AuthData {
         this.roll = roll;
     }
 
-    public AuthData(String plainPassword, String username, AuthRoll roll) {
+    public AuthData(String username, String plainPassword, AuthRoll roll){
         try {
             var crypto = Crypto.hashPassword(plainPassword);
             this.passwordHash = crypto.password;
@@ -28,6 +28,8 @@ public class AuthData {
             //////////////////////////////////////////////////////////////////////////////////////////////////////// TODO LEEL SAAS SOOS DAT IS KACKE
             e.printStackTrace();
         }
+    
+        
     }
 
     public String passwordHash;
