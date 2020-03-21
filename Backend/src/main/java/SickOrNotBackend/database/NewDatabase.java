@@ -1,7 +1,4 @@
-
 package SickOrNotBackend.database;
-
-import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
