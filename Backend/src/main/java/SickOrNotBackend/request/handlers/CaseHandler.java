@@ -23,7 +23,7 @@ public class CaseHandler implements Handler {
         if(caseBody==null){
             ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
         }else{
-            Case ccase = new Case(caseBody.location, caseBody.date, HealthType.MAYBE,UUID.randomUUID().toString());
+            Case ccase = new Case(caseBody.location, caseBody.date, HealthType.MAYBE, UUID.randomUUID().toString());
             if(!App.database.insertCase(ccase)){
                 ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Data is not saved!"));
             }

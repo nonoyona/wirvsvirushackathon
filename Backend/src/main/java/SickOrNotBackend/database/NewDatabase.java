@@ -46,6 +46,7 @@ public class NewDatabase implements IDatabase {
     @Override
     public HealthType getState(String id) {
         var result = collection.find(Filters.eq("number", id));
+
         var doc = result.first();
         if (doc == null) {
             throw new NullPointerException("No Case with id found");
