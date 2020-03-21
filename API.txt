@@ -1,0 +1,84 @@
+﻿API
+
+
+Register User (ADMIN needed) POST /register
+        Header: Authorization: <JsonWebToken>
+        Body:
+{
+“username”: “<username>”,
+                “password”: ”<password>”
+                “authRoll”: “UNAUTHORIZED” oder “INSTITUTION” oder “ADMIN”
+}
+
+
+Returns:
+status 200 - User wurde erstellt
+        status 400 - falsches Body JSON
+                status 401 - Nicht autorisiert
+status 409 - Username existiert bereits 
+
+
+Login POST /login
+        Header: ---
+        Body:
+{
+“username”: “<username>”,
+                “password”: ”<password>”
+}
+
+
+Returns:
+status 200 - Erfolgreich angemeldet -> { “token”: “<JsonWebToken>” }
+        status 400 - falsches Body JSON
+                status 401 - Nicht autorisiert
+
+
+
+
+CaseCreation (ADMIN oder INSTITUTION needed) POST /create
+        Header: Authorization: <JsonWebToken>
+Body:
+{
+“date”: <time in Millis>, 
+                “location”: ”<location>”
+}
+
+
+Returns:
+status 200 - Erfolgreich case erstellt -> { “id”: “<case id>” }
+        status 400 - falsches Body JSON
+                status 401 - Nicht autorisiert
+status 409 - timeout bei 100 Versuchen existierte Case id bereits
+                        (wird nie passieren, statstoch und so)
+
+
+Test Result Abfragen GET /result/:id
+        Header: -
+Body: -
+
+
+Returns:
+status 200 - Erfolgreich Ergebnis gelesen
+-> { “testResult”: “UNTESTED” oder “POSITIVE” oder “NEGATIVE” }
+        status 404 - kein Case mit der gegebenen id
+
+
+
+
+
+
+Test result registrieren (ADMIN oder INSTITUTION needed) POST /result/:id
+        Nur möglich falls user auch den Fall erstellt hat
+        
+Header: Authorization: <JsonWebToken>
+-        Body:
+{
+“testResult”: “UNTESTED” oder “POSITIVE” oder “NEGATIVE”
+}
+
+
+Returns:
+status 200 - Erfolgreich test result registriert
+        status 400 - falsches Body JSON
+                status 401 - Nicht autorisiert
+status 404 - case mit gegebener id existiert nicht
