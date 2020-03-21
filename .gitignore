@@ -12,6 +12,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+Backend/.idea/*
+
 # Generated files
 .idea/**/contentModel.xml
 
