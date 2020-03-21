@@ -43,6 +43,7 @@ public interface IDatabase {
      * 
      * @param status new status of the case
      * @param id case id
+     * @throws NullPointerException if no case with [id] exists
      */
     public void updateHealthStatus(HealthType status, String id);
 
@@ -55,6 +56,7 @@ public interface IDatabase {
      * access rights for this case.
      * 
      * @return case with the specific id
+     * @throws NullPointerException if no case with [id] exists
      */
     public Case getCase(String id);
 

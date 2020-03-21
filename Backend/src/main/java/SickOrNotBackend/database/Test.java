@@ -8,7 +8,7 @@ import SickOrNotBackend.datatypes.HealthType;
 public class Test {
     public static void main(String[] args) {
         NewDatabase database = new NewDatabase();
-        database.insertCase(new Case("Test Ort", new Date().toString(), HealthType.SICK, "LEELSAAS"));
+        database.insertCase(new Case("Test Ort", new Date(), HealthType.SICK, "LEELSAAS"));
         System.out.println(database.getState("LEELSAAS"));
 
     }

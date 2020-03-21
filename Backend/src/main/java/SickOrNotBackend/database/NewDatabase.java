@@ -3,19 +3,15 @@ package SickOrNotBackend.database;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.sun.net.httpserver.Filter;
+import com.mongodb.client.model.Updates;
 
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
 
 import SickOrNotBackend.datatypes.Case;
 import SickOrNotBackend.datatypes.HealthType;
@@ -30,9 +26,8 @@ public class NewDatabase implements IDatabase {
     MongoCollection<Document> collection;
 
     public NewDatabase() {
-        // client =
-        // MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com/?authSource=admin");
-        client = MongoClients.create();
+        client = MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com/?authSource=admin");
+        // client = MongoClients.create();
         database = client.getDatabase("test");
         collection = database.getCollection("testCollection");
     }
@@ -40,7 +35,7 @@ public class NewDatabase implements IDatabase {
     @Override
     public boolean insertCase(Case c) {
         Document d;
-		d = new Document(new ObjectMapper().convertValue(c, Map.class));
+        d = new Document(new ObjectMapper().convertValue(c, Map.class));
         var num = collection.countDocuments(Filters.eq("number", c.number));
         if (num > 0)
             return false;
@@ -52,28 +47,43 @@ public class NewDatabase implements IDatabase {
     public HealthType getState(String id) {
         var result = collection.find(Filters.eq("number", id));
         var doc = result.first();
-
+        if (doc == null) {
+            throw new NullPointerException("No Case with id found");
+        }
         var healthStr = doc.getString("health");
-        
-		return HealthType.valueOf(healthStr);
+
+        return HealthType.valueOf(healthStr);
     }
 
     @Override
     public boolean caseExists(String id) {
-        // TODO Auto-generated method stub
-        return false;
+        var num = collection.countDocuments(Filters.eq("number", id));
+        return num > 0;
     }
 
     @Override
     public void updateHealthStatus(HealthType status, String id) {
-        // TODO Auto-generated method stub
-
+        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", status));
+        if (result.getModifiedCount() < 1) {
+            throw new NullPointerException("No Case with id found");
+        }
     }
 
     @Override
     public Case getCase(String id) {
-        // TODO Auto-generated method stub
-        return null;
+        var result = collection.find(Filters.eq("number", id));
+        var doc = result.first();
+        if (doc == null) {
+            throw new NullPointerException("No Case with id found");
+        }
+        try {
+            Case c = new Case(doc.getString("location"), doc.getDate("date"),
+                    HealthType.valueOf(doc.getString("health")), doc.getString("number"));
+            return c;
+        } catch (ClassCastException e) {
+            //Shuld not happen because this database contains only Cases
+            return null;
+        }
     }
 
 }
