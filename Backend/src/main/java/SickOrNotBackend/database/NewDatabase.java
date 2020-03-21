@@ -64,4 +64,16 @@ public class NewDatabase implements IDatabase {
         return false;
     }
 
+    @Override
+    public void updateHealthStatus(HealthType status, String id) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Case getCase(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
