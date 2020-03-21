@@ -51,6 +51,7 @@ public class NewDatabase implements IDatabase {
     @Override
     public HealthType getState(String id) {
         var result = collection.find(Filters.eq("number", id));
+
         var doc = result.first();
 
         var healthStr = doc.getString("health");
