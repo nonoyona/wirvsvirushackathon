@@ -34,8 +34,7 @@ public class NewDatabase implements IDatabase {
 
     @Override
     public boolean insertCase(Case c) {
-        Document d;
-        d = new Document(new ObjectMapper().convertValue(c, Map.class));
+        Document d = new Document(new ObjectMapper().convertValue(c, Map.class));
         var num = collection.countDocuments(Filters.eq("number", c.number));
         if (num > 0)
             return false;
