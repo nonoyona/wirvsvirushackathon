@@ -26,7 +26,7 @@ public class NewDatabase implements IDatabase {
     MongoCollection<Document> collection;
 
     public NewDatabase() {
-        client = MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com/?authSource=admin");
+        client = MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false");
         // client = MongoClients.create();
         database = client.getDatabase("test");
         collection = database.getCollection("testCollection");
@@ -34,7 +34,7 @@ public class NewDatabase implements IDatabase {
 
     @Override
     public boolean insertCase(Case c) {
-        Document d = new Document(new ObjectMapper().convertValue(c, Map.class));
+        Document d = new Document(new ObjectMapper().convertValue(c, JsonMap.class));
         var num = collection.countDocuments(Filters.eq("number", c.number));
         if (num > 0)
             return false;
