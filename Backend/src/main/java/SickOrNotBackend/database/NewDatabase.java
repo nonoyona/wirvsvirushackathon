@@ -1,5 +1,7 @@
 package SickOrNotBackend.database;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -31,8 +33,8 @@ public class NewDatabase implements IDatabase {
 
     @Override
     public boolean insertCase(Case c) {
-        Document d = new Document(new ObjectMapper().convertValue(c, JsonMap.class));
-        var num = collection.countDocuments(Filters.eq("number", c.id));
+        Document d = new Document(new ObjectMapper().convertValue(c, Map.class));
+        var num = collection.countDocuments(Filters.eq("number", c.number));
         if (num > 0)
             return false;
         collection.insertOne(d);
