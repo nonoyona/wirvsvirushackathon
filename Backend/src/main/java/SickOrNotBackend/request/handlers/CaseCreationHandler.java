@@ -2,6 +2,8 @@ package SickOrNotBackend.request.handlers;
 
 import java.util.UUID;
 
+import SickOrNotBackend.authentication.JWTHandler;
+import SickOrNotBackend.datatypes.AuthRoll;
 import org.eclipse.jetty.http.HttpStatus;
 
 import SickOrNotBackend.App;
@@ -19,15 +21,20 @@ public class CaseCreationHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        CaseCreationBody caseBody = ctx.bodyValidator(CaseCreationBody.class).getOrNull();
-        if (caseBody == null) {
-            ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
-        } else {
-            Case c = new Case(caseBody.location, caseBody.date, TestResult.UNTESTED, UUID.randomUUID().toString());
-            if (!App.database.insertCase(c)) {
-                ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Data is not saved!"));
+        AuthRoll authRoll = JWTHandler.getAuthRollByContext(ctx);
+        if (authRoll == AuthRoll.ADMIN || authRoll == AuthRoll.INSTITUTION) {
+            CaseCreationBody caseBody = ctx.bodyValidator(CaseCreationBody.class).getOrNull();
+            if (caseBody == null) {
+                ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
+            } else {
+                Case c = new Case(caseBody.location, caseBody.date, TestResult.UNTESTED, UUID.randomUUID().toString());
+                if (!App.database.insertCase(c)) {
+                    ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Data is not saved!"));
+                }
+                ctx.status(HttpStatus.OK_200).json(c.number);
             }
-            ctx.status(HttpStatus.OK_200).json(c.number);
+        }else{
+            ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));
         }
     }
 }
