@@ -4,15 +4,16 @@ import java.util.UUID;
 
 import org.eclipse.jetty.http.HttpStatus;
 
-import SickOrNotBackend.dataTypes.Case;
-import SickOrNotBackend.dataTypes.HealthType;
+import SickOrNotBackend.App;
+import SickOrNotBackend.datatypes.Case;
+import SickOrNotBackend.datatypes.HealthType;
 import SickOrNotBackend.request.types.BadRequestResponse;
 import SickOrNotBackend.request.types.CreateCaseBody;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 
 /**
- * Handler
+ * fills the case body and saves it 
  */
 public class CaseHandler implements Handler {
 
@@ -20,13 +21,14 @@ public class CaseHandler implements Handler {
     public void handle(Context ctx) throws Exception {
         CreateCaseBody caseBody = ctx.bodyValidator(CreateCaseBody.class).getOrNull();
         if(caseBody==null){
-            ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Arguments were not formatted correctly"));
+            ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
         }else{
-            Case fuckCase = new Case(caseBody.location, caseBody.date, HealthType.MAYBE,UUID.randomUUID().toString());
-            
-            ctx.status(HttpStatus.OK_200).json(fuckCase.number);
-        }
-        
+            Case ccase = new Case(caseBody.location, caseBody.date, HealthType.MAYBE,UUID.randomUUID().toString());
+            if(!App.database.insertCase(ccase)){
+                ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Data is not saved!"));
+            }
+            ctx.status(HttpStatus.OK_200).json(ccase.number);
+        } 
     }
 }
     

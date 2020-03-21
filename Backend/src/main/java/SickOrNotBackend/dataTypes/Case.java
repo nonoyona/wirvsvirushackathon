@@ -1,4 +1,4 @@
-package SickOrNotBackend.dataTypes;
+package SickOrNotBackend.datatypes;
 
 import java.util.Date;
 
