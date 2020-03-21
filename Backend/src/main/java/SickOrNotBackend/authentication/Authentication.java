@@ -1,4 +1,6 @@
-package SickOrNotBackend.authentication;
+package SickOrNotBackend.authentication.handlers.registeruser;
+
+import SickOrNotBackend.authentication.AuthenticationDataBase;
 
 import java.net.UnknownHostException;
 import java.util.Random;
