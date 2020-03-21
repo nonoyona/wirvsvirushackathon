@@ -3,10 +3,14 @@
  */
 package SickOrNotBackend;
 
+import SickOrNotBackend.database.IDatabase;
 import SickOrNotBackend.request.handlers.TestHandler;
 import io.javalin.Javalin;
 
 public class App {
+
+    public static IDatabase database;
+
     public String getGreeting() {
         return "Hello world.";
     }
