@@ -1,4 +1,4 @@
-package SickOrNotBackend.authentication.handlers;
+package SickOrNotBackend.authentication;
 
 import SickOrNotBackend.App;
 import SickOrNotBackend.authentication.JWTHandler;

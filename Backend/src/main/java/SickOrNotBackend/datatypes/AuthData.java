@@ -1,5 +1,4 @@
 
-
 package SickOrNotBackend.datatypes;
 
 /**
@@ -7,7 +6,19 @@ package SickOrNotBackend.datatypes;
  */
 public class AuthData {
 
+    public AuthData(String passwordHash, String passwordSalt, String username, AuthRoll roll) {
+        this.passwordHash = passwordHash;
+        this.passwordSalt = passwordSalt;
+        this.username = username;
+        this.roll = roll;
+    }
+
+    public AuthData(String plainPassword, String username, AuthRoll roll){
+        
+    }
+
     public String passwordHash;
+    public String passwordSalt;
     public String username;
     public AuthRoll roll;
 }

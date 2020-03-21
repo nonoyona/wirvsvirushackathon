@@ -27,8 +27,11 @@ public interface IAuthentication {
     /**
      * Gets the authentication Data of a user by his jsonwebtoken
      * 
+     * REQUIRES user with given webtoken exists in database
+     * 
      * @param jsonWebToken The JsonWebToken as String
      * @return The Authetication data of a user by his jwt
+     * @throws NullPointerException if no user with that token exists
      */
     public AuthData getAuthData(String jsonWebToken);
 
@@ -47,8 +50,17 @@ public interface IAuthentication {
      * 
      * This function should only be called by an ADMIN
      * @param data user-data
+     * @throws IllegalArgumentException if username already exists
      */
     public void registerUser(AuthData data);
+
+    /**
+     * Determines whether the username already exists.
+     * 
+     * @param username The username to check
+     * @return true if the username exists in the database, false otherwise
+     */
+    public boolean usernameExists(String username);
 
     /**
      * Changes the password of a user

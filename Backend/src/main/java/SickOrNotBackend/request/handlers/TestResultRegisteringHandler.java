@@ -4,6 +4,7 @@ import SickOrNotBackend.App;
 import SickOrNotBackend.authentication.JWTHandler;
 import SickOrNotBackend.datatypes.AuthRoll;
 import SickOrNotBackend.request.types.BadRequestResponse;
+import SickOrNotBackend.request.types.BodyFormatErrorResponse;
 import SickOrNotBackend.request.types.TestResultRegisteringBody;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -25,7 +26,7 @@ public class TestResultRegisteringHandler implements Handler {
                     ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));
                 }
             } else {
-                ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Arguments were not formatted correctly"));
+                ctx.status(HttpStatus.BAD_REQUEST_400).json(new BodyFormatErrorResponse());
             }
         }
     }
