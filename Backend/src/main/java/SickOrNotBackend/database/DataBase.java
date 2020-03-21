@@ -20,4 +20,4 @@ public class DataBase {
         database = mongoClient.getDB(databaseName);
         collection = database.createCollection("testresults", null);
     }
-
+}
