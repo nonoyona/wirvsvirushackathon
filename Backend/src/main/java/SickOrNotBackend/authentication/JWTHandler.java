@@ -19,12 +19,27 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTHandler {
 
     /**
+     * JWTData
+     */
+    public static class JWTData {
+
+        public JWTData(AuthRoll roll, String username) {
+            this.roll = roll;
+            this.username = username;
+        }
+
+        public AuthRoll roll;
+        public String username;
+    }
+
+    /**
      * Creates a signed JWT
      * 
-     * Creates a signed JsonWebToken containing the [userId] and the [roll] of a User.
+     * Creates a signed JsonWebToken containing the [userId] and the [roll] of a
+     * User.
      * 
-     * @param userId unique user ID of a user
-     * @param roll Authentication-Roll of a user
+     * @param userId           unique user ID of a user
+     * @param roll             Authentication-Roll of a user
      * @param expirationMillis Milliseconds until the Token expires
      * @return The signed JWT as String
      */
@@ -75,33 +90,35 @@ public class JWTHandler {
     }
 
     /**
-     * Gets the Authetication-Roll of a user by his webtoken
+     * Gets the JWT data of a user by his webtoken
      * 
      * @param jwt JsonWebToken of the Http Request of the user
-     * @return The Authentication-Roll of the user
+     * @return The JWT data of the user
      */
-    public static AuthRoll getAuthRoll(String jwt) {
+    public static JWTData getJWTData(String jwt) {
         try {
             var claims = decodeJWT(jwt);
-            return AuthRoll.valueOf(claims.getAudience());
+            return new JWTData(AuthRoll.valueOf(claims.getAudience()), claims.getId());
         } catch (Exception e) {
-            return AuthRoll.UNAUTHORIZED;
+            return new JWTData(AuthRoll.UNAUTHORIZED, "username");
         }
     }
 
     /**
-     * Gets the Authentication-Roll of a user by his request context
+     * Gets the JWT data of a user by his request context
      * 
      * @param ctx Context of the request
-     * @return The Authentication-Roll of the user
+     * @return The JWT data of the user
      */
-    public static AuthRoll getAuthRollByContext(Context ctx) {
+    public static JWTData getJWTDataByContext(Context ctx) {
         var header = ctx.header("Bearer");
         if (header == null) {
-            return AuthRoll.UNAUTHORIZED;
+            return new JWTData(AuthRoll.UNAUTHORIZED, "username");
         } else {
-            return getAuthRoll(header);
+            return getJWTData(header);
         }
     }
+
+    
 
 }
