@@ -1,5 +1,6 @@
 package SickOrNotBackend.database;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import com.mongodb.BasicDBObject;
@@ -7,15 +8,21 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
-public class Database {
+import SickOrNotBackend.datatypes.Case;
+import SickOrNotBackend.datatypes.HealthType;
+
+public class Database implements IDatabase {
     private MongoClient mongoClient;
     private DBCollection collection;
     private DB database;
     private String databaseName = "test";
 
     public Database() throws UnknownHostException {
-        mongoClient = new MongoClient("localhost", 27017);
+        MongoClientURI uri = new MongoClientURI(
+                "mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com/?authSource=admin");
+        mongoClient = new MongoClient(uri);
         database = mongoClient.getDB(databaseName);
         collection = database.createCollection("testresults", null);
     }
@@ -32,5 +39,15 @@ public class Database {
         document.put("str", string);
         document.put("val", value);
         collection.insert(document);
+    }
+
+    @Override
+    public boolean insertCase(Case c) {
+        return false;
+    }
+
+    @Override
+    public HealthType getState(String id) {
+        return null;
     }
 }

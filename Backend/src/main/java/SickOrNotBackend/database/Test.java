@@ -1,16 +1,15 @@
 package SickOrNotBackend.database;
 
-import java.net.UnknownHostException;
+import java.util.Date;
+
+import SickOrNotBackend.datatypes.Case;
+import SickOrNotBackend.datatypes.HealthType;
 
 public class Test {
     public static void main(String[] args) {
-        try {
-            Database database = new Database();
-            database.insert("0", true);
-            System.out.println(database.search("0"));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        
+        NewDatabase database = new NewDatabase();
+        database.insertCase(new Case("Test Ort", new Date().toString(), HealthType.SICK, "LEELSAAS"));
+        System.out.println(database.getState("LEELSAAS"));
+
     }
 }
