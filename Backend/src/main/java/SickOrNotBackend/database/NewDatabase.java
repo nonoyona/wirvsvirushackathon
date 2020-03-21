@@ -62,7 +62,7 @@ public class NewDatabase implements IDatabase {
 
     @Override
     public void registerTestResult(TestResult testResult, String id) {
-        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", testResult));
+        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", testResult.toString()));
         if (result.getModifiedCount() < 1) {
             throw new NullPointerException("No Case with id found");
         }
