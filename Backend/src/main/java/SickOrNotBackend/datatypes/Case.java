@@ -17,5 +17,4 @@ public class Case {
         this.health = health;
         this.number = number;
     }
-
 }
