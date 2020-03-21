@@ -111,7 +111,7 @@ public class JWTHandler {
      * @return The JWT data of the user
      */
     public static JWTData getJWTDataByContext(Context ctx) {
-        var header = ctx.header("Bearer");
+        var header = ctx.header("Authorization");
         if (header == null) {
             return new JWTData(AuthRoll.UNAUTHORIZED, "username");
         } else {

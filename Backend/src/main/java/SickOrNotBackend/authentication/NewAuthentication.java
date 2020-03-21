@@ -1,6 +1,17 @@
 
 package SickOrNotBackend.authentication;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+import org.bson.Document;
+
 import SickOrNotBackend.datatypes.AuthData;
 import SickOrNotBackend.datatypes.AuthRoll;
 
@@ -9,15 +20,13 @@ import SickOrNotBackend.datatypes.AuthRoll;
  */
 public class NewAuthentication implements IAuthentication {
 
-    private MongoClient mongoClient;
-    private DBCollection collection;
-    private DB database;
+    private MongoCollection<Document> collection;
+    private MongoDatabase database;
     private String databaseName = "authentication";
 
-    public AuthenticationDataBase() throws UnknownHostException {
-        mongoClient = new MongoClient("localhost", 27017);
-        database = mongoClient.getDB(databaseName);
-        collection = database.createCollection("passwords", null);
+    public NewAuthentication(MongoClient client) {
+        database = client.getDatabase(databaseName);
+        collection = database.getCollection("users");
     }
 
     @Override
@@ -28,27 +37,41 @@ public class NewAuthentication implements IAuthentication {
 
     @Override
     public AuthData getAuthData(String jsonWebToken) {
-        // TODO Auto-generated method stub
-        return null;
+        var data = JWTHandler.getJWTData(jsonWebToken);
+        var result = collection.find(Filters.eq("username", data.username));
+
+        var doc = result.first();
+        if (doc == null) {
+            throw new NullPointerException("No User with username found");
+        }
+
+        return new AuthData(doc.getString("passwordHash"), doc.getString("passwordSalt"), doc.getString("username"),
+                AuthRoll.valueOf(doc.getString("roll")));
     }
 
     @Override
     public void setAuthRoll(String username, AuthRoll roll) {
-        // TODO Auto-generated method stub
-
+        this.collection.updateOne(Filters.eq("username", username), Updates.set(fieldName, value))
     }
 
     @Override
     public void registerUser(AuthData data) {
-        // TODO Auto-generated method stub
-
+        Document d = new Document(new ObjectMapper().convertValue(data, Map.class));
+        var num = collection.countDocuments(Filters.eq("username", data.username));
+        if (num > 0)
+            throw new IllegalArgumentException("This username already exists");
+        collection.insertOne(d);
     }
 
     @Override
     public void changePassword(String username, String newPassword) {
-        // TODO Auto-generated method stub
-
+        
     }
 
-    
+    @Override
+    public boolean usernameExists(String username) {
+        var num = collection.countDocuments(Filters.eq("username", username));
+        return num > 0;
+    }
+
 }

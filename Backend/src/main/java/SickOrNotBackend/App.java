@@ -3,7 +3,10 @@
  */
 package SickOrNotBackend;
 
+import com.mongodb.client.MongoClients;
+
 import SickOrNotBackend.authentication.IAuthentication;
+import SickOrNotBackend.authentication.NewAuthentication;
 import SickOrNotBackend.database.IDatabase;
 import SickOrNotBackend.database.NewDatabase;
 import SickOrNotBackend.request.handlers.TestResultReceivingHandler;
@@ -18,7 +21,9 @@ public class App {
     public static IAuthentication authentication;
 
     public static void main(String[] args) {
-        database = new NewDatabase();
+        var client =  MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false");
+        database = new NewDatabase(client);
+        authentication = new NewAuthentication(client);
         Javalin app = Javalin.create().start(8080);
         app.get("/", new TestHandler());
         app.get("/result/:id", new TestResultReceivingHandler());
