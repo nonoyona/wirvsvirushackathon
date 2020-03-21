@@ -13,7 +13,7 @@ public class AuthData {
         this.roll = roll;
     }
 
-    public AuthData(String plainPassword, String username, AuthRoll roll){
+    public AuthData(String username, String plainPassword, AuthRoll roll){
         
     }
 

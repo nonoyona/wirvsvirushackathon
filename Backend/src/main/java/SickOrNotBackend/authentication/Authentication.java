@@ -1,4 +1,4 @@
-package SickOrNotBackend.authentication.handlers.registeruser;
+package SickOrNotBackend.authentication;
 
 import SickOrNotBackend.authentication.AuthenticationDataBase;
 

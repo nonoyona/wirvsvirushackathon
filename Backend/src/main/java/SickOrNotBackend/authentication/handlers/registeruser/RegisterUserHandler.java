@@ -1,4 +1,4 @@
-package SickOrNotBackend.authentication;
+package SickOrNotBackend.authentication.handlers.registeruser;
 
 import SickOrNotBackend.App;
 import SickOrNotBackend.authentication.JWTHandler;
