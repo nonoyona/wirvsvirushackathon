@@ -14,7 +14,7 @@ import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 import SickOrNotBackend.datatypes.Case;
-import SickOrNotBackend.datatypes.HealthType;
+import SickOrNotBackend.datatypes.TestResult;
 
 /**
  * NewDatabase
@@ -44,7 +44,7 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public HealthType getState(String id) {
+    public TestResult getState(String id) {
         var result = collection.find(Filters.eq("number", id));
 
         var doc = result.first();
@@ -53,7 +53,7 @@ public class NewDatabase implements IDatabase {
         }
         var healthStr = doc.getString("health");
 
-        return HealthType.valueOf(healthStr);
+        return TestResult.valueOf(healthStr);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public void updateHealthStatus(HealthType status, String id) {
-        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", status));
+    public void registerTestResult(TestResult testResult, String id) {
+        var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", testResult));
         if (result.getModifiedCount() < 1) {
             throw new NullPointerException("No Case with id found");
         }
@@ -78,11 +78,11 @@ public class NewDatabase implements IDatabase {
             throw new NullPointerException("No Case with id found");
         }
         try {
-            Case c = new Case(doc.getString("location"), doc.getDate("date"),
-                    HealthType.valueOf(doc.getString("health")), doc.getString("number"));
-            return c;
+            return new Case(doc.getString("location"), doc.getDate("date"),
+                    TestResult.valueOf(doc.getString("health")), doc.getString("number"));
         } catch (ClassCastException e) {
-            //Shuld not happen because this database contains only Cases
+            //Should not happen because this database contains only Cases
+            assert false;
             return null;
         }
     }

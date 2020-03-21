@@ -2,7 +2,7 @@
 package SickOrNotBackend.database;
 
 import SickOrNotBackend.datatypes.Case;
-import SickOrNotBackend.datatypes.HealthType;
+import SickOrNotBackend.datatypes.TestResult;
 
 /**
  * IDatabase
@@ -25,7 +25,7 @@ public interface IDatabase {
      * @return health state of the patient
      * @throws NullpointerException if no case wit id [id] exists
      */
-    public HealthType getState(String id);
+    public TestResult getState(String id);
 
     /**
      * Determinates whether a case exists in the database.
@@ -45,7 +45,7 @@ public interface IDatabase {
      * @param id case id
      * @throws NullPointerException if no case with [id] exists
      */
-    public void updateHealthStatus(HealthType status, String id);
+    public void registerTestResult(TestResult status, String id);
 
     /**
      * Gets a case with id [id]
