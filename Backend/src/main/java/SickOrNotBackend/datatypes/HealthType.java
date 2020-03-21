@@ -1,5 +1,4 @@
-package SickOrNotBackend.datatypes;
-
+package SickOrNotBackend.dataTypes;
 public enum HealthType{
-    SICK, NOT, MAYBE
+    SICK,NOT,MAYBE
 }
