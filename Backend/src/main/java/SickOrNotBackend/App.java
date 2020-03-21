@@ -7,6 +7,8 @@ import SickOrNotBackend.authentication.IAuthentication;
 import SickOrNotBackend.database.IDatabase;
 import SickOrNotBackend.database.NewDatabase;
 import SickOrNotBackend.request.handlers.TestResultReceivingHandler;
+import SickOrNotBackend.request.handlers.TestResultRegisteringHandler;
+import SickOrNotBackend.request.handlers.CaseCreationHandler;
 import SickOrNotBackend.request.handlers.TestHandler;
 import io.javalin.Javalin;
 
@@ -20,6 +22,8 @@ public class App {
         Javalin app = Javalin.create().start(8080);
         app.get("/", new TestHandler());
         app.get("/result/:id", new TestResultReceivingHandler());
+        app.post("/create", new CaseCreationHandler());
+        app.post("/result/:id", new TestResultRegisteringHandler());
         
     }
 }
