@@ -12,7 +12,7 @@ public interface IDatabase {
     /**
      * Inserts a case into the database
      * 
-     * @return true if case was inserted successfully, false otherwise
+     * @return true if case was inserted successfully, false otherwise (e.g. key duplicate)
      */
     public boolean insertCase(Case c);
 
@@ -26,6 +26,13 @@ public interface IDatabase {
      * @throws NullpointerException if no case wit id [id] exists
      */
     public HealthType getState(String id);
+
+    /**
+     * Determinates whether a case exists in the database.
+     * 
+     * @return true if the case exists, false otherwise
+     */
+    public boolean caseExists(String id);
 
     
 }
