@@ -24,7 +24,7 @@ public class RegisterUserHandler implements Handler {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BodyFormatErrorResponse());
             } else {
                 App.authentication.registerUser(new AuthData(body.username, body.password, body.authRoll));
-                ctx.status(HttpStatus.OK_200).json(new TestResponse());
+                ctx.status(HttpStatus.OK_200).json(data.username);
             }
         } else {
             ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));
