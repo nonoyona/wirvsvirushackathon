@@ -2,6 +2,7 @@ package SickOrNotBackend.database;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -74,10 +75,14 @@ public class NewDatabase implements IDatabase {
             throw new NullPointerException("No Case with id found");
         }
         try {
-            return new Case(doc.getString("id"), doc.getString("username"), doc.getDate("date"), doc.getString("location"),
+            return new Case(doc.getString("id"), 
+            doc.getString("username"), 
+            new Date(doc.getLong("date")),
+                    doc.getString("location"), 
                     TestResult.valueOf(doc.getString("health")));
         } catch (ClassCastException e) {
-            //Should not happen because this database contains only Cases
+            e.printStackTrace();
+            // Should not happen because this database contains only Cases
             assert false;
             return null;
         }

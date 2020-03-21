@@ -1,6 +1,7 @@
 
 package SickOrNotBackend.authentication;
 
+import java.security.AccessControlException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
@@ -33,18 +34,23 @@ public class NewAuthentication implements IAuthentication {
 
     @Override
     public String getJsonWebToken(String username, String password) {
-        var data = this.getAuthDataByUsername(username);
         try {
-            if (Crypto.checkPassword(password, new HashData(data.passwordHash, data.passwordSalt))) {
-                var result = JWTHandler.createJWT(data.username, data.roll, 60 * 1000 * 15);
-                return result;
+            var data = this.getAuthDataByUsername(username);
+            try {
+                if (Crypto.checkPassword(password, new HashData(data.passwordHash, data.passwordSalt))) {
+                    var result = JWTHandler.createJWT(data.username, data.roll, 60 * 1000 * 15);
+                    return result;
+                } else {
+                    throw new AccessControlException("Auth failed");
+                }
+
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                throw new AccessControlException("Auth failed");
             }
-            
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (NullPointerException e) {
+            throw new AccessControlException("Auth failed");
         }
-        return null;
     }
 
     @Override
@@ -89,6 +95,7 @@ public class NewAuthentication implements IAuthentication {
             var result = this.collection.updateOne(Filters.eq("username", username), Updates
                     .combine(Updates.set("passwordHash", crypto.password), Updates.set("passwordSalt", crypto.salt)));
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
             // TODO Give feedback that it didnt work
         }
 
