@@ -14,7 +14,7 @@ import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 import SickOrNotBackend.datatypes.Case;
-import SickOrNotBackend.datatypes.HealthType;
+import SickOrNotBackend.datatypes.TestResult;
 
 /**
  * NewDatabase
@@ -44,7 +44,7 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public HealthType getState(String id) {
+    public TestResult getState(String id) {
         var result = collection.find(Filters.eq("number", id));
 
         var doc = result.first();
@@ -53,7 +53,7 @@ public class NewDatabase implements IDatabase {
         }
         var healthStr = doc.getString("health");
 
-        return HealthType.valueOf(healthStr);
+        return TestResult.valueOf(healthStr);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public void updateHealthStatus(HealthType status, String id) {
+    public void updateHealthStatus(TestResult status, String id) {
         var result = collection.updateOne(Filters.eq("number", id), Updates.set("health", status));
         if (result.getModifiedCount() < 1) {
             throw new NullPointerException("No Case with id found");
@@ -79,7 +79,7 @@ public class NewDatabase implements IDatabase {
         }
         try {
             Case c = new Case(doc.getString("location"), doc.getDate("date"),
-                    HealthType.valueOf(doc.getString("health")), doc.getString("number"));
+                    TestResult.valueOf(doc.getString("health")), doc.getString("number"));
             return c;
         } catch (ClassCastException e) {
             //Shuld not happen because this database contains only Cases
