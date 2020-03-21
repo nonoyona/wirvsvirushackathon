@@ -1,13 +1,14 @@
 package SickOrNotBackend.database;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 
 import org.bson.Document;
@@ -80,6 +81,17 @@ public class NewDatabase implements IDatabase {
             assert false;
             return null;
         }
+    }
+
+    @Override
+    public List<Case> getCases(String username, int startIndex, int resultCount) {
+        var results = collection.find(Filters.eq("username", username)).sort(Sorts.descending("date")).skip(startIndex).limit(resultCount);
+        List<Case> list = new LinkedList<>();
+        for (Document doc : results){
+            list.add(new Case(doc.getString("id"), doc.getString("username"), doc.getDate("date"), doc.getString("location"),
+                    TestResult.valueOf(doc.getString("health"))));
+        }
+        return list;
     }
 
 }

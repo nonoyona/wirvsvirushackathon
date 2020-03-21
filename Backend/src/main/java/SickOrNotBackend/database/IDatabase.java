@@ -4,6 +4,9 @@ package SickOrNotBackend.database;
 import SickOrNotBackend.datatypes.Case;
 import SickOrNotBackend.datatypes.TestResult;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * IDatabase
  */
@@ -60,4 +63,8 @@ public interface IDatabase {
      */
     public Case getCase(String id);
 
+    /**
+     *
+     */
+    public List<Case> getCases(String username, int startIndex, int resultCount);
 }
