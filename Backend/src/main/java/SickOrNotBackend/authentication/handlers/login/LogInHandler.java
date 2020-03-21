@@ -1,11 +1,6 @@
 package SickOrNotBackend.authentication.handlers.login;
 
 import SickOrNotBackend.App;
-import SickOrNotBackend.authentication.JWTHandler;
-import SickOrNotBackend.authentication.handlers.login.LogInBody;
-import SickOrNotBackend.authentication.handlers.registeruser.RegisterUserBody;
-import SickOrNotBackend.datatypes.AuthData;
-import SickOrNotBackend.datatypes.AuthRoll;
 import SickOrNotBackend.request.types.BadRequestResponse;
 import SickOrNotBackend.request.types.BodyFormatErrorResponse;
 import io.javalin.http.Context;
@@ -24,7 +19,7 @@ public class LogInHandler implements Handler {
         } else {
             try {
                 String token = App.authentication.getJsonWebToken(body.username, body.password);
-                ctx.status(HttpStatus.OK_200).json(token);
+                ctx.status(HttpStatus.OK_200).json(new LogInSuccessResponse(token));
             }catch (AccessControlException e){
                 ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("Wrong username or password!"));
             }

@@ -7,6 +7,8 @@ import com.mongodb.client.MongoClients;
 
 import SickOrNotBackend.authentication.IAuthentication;
 import SickOrNotBackend.authentication.NewAuthentication;
+import SickOrNotBackend.authentication.handlers.login.LogInHandler;
+import SickOrNotBackend.authentication.handlers.registeruser.RegisterUserHandler;
 import SickOrNotBackend.database.IDatabase;
 import SickOrNotBackend.database.NewDatabase;
 import SickOrNotBackend.request.handlers.TestResultReceivingHandler;
@@ -29,6 +31,8 @@ public class App {
         app.get("/result/:id", new TestResultReceivingHandler());
         app.post("/create", new CaseCreationHandler());
         app.post("/result/:id", new TestResultRegisteringHandler());
+        app.post("/login", new LogInHandler());
+        app.post("/register", new RegisterUserHandler());
         
     }
 }

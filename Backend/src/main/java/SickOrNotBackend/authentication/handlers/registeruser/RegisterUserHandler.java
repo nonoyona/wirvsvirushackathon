@@ -2,13 +2,10 @@ package SickOrNotBackend.authentication.handlers.registeruser;
 
 import SickOrNotBackend.App;
 import SickOrNotBackend.authentication.JWTHandler;
-import SickOrNotBackend.authentication.handlers.registeruser.RegisterUserBody;
 import SickOrNotBackend.datatypes.AuthData;
 import SickOrNotBackend.datatypes.AuthRoll;
 import SickOrNotBackend.request.types.BadRequestResponse;
 import SickOrNotBackend.request.types.BodyFormatErrorResponse;
-import SickOrNotBackend.request.types.TestBody;
-import SickOrNotBackend.request.types.TestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import org.eclipse.jetty.http.HttpStatus;
@@ -23,8 +20,13 @@ public class RegisterUserHandler implements Handler {
             if (body == null) {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BodyFormatErrorResponse());
             } else {
-                App.authentication.registerUser(new AuthData(body.username, body.password, body.authRoll));
-                ctx.status(HttpStatus.OK_200).json(data.username);
+                try {
+                    var authData = new AuthData(body.username, body.password, body.authRoll);
+                    App.authentication.registerUser(authData);
+                    ctx.status(HttpStatus.OK_200).json(authData);
+                } catch (IllegalArgumentException e) {
+                    ctx.status(HttpStatus.CONFLICT_409).json(new BadRequestResponse("Username already exists!"));
+                }
             }
         } else {
             ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));

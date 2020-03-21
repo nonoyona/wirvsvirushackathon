@@ -1,7 +1,6 @@
 
 package SickOrNotBackend.authentication;
 
-import java.security.AccessControlException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
