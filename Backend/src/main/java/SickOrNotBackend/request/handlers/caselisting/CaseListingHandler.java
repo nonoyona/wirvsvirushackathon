@@ -24,7 +24,7 @@ public class CaseListingHandler implements Handler {
                 ctx.status(HttpStatus.BAD_REQUEST_400).json(new BadRequestResponse("Some Arguments are missing or wrong!"));
             } else {
                 var result = App.database.getCases(data.username, caseBody.startIndex, caseBody.caseCount);
-                ctx.status(HttpStatus.OK_200).json(new CaseListingResult());
+                ctx.status(HttpStatus.OK_200).json(new CaseListingResult(result));
             }
         }else{
             ctx.status(HttpStatus.UNAUTHORIZED_401).json(new BadRequestResponse("You are not authorized!"));

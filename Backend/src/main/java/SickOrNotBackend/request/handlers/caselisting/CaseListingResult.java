@@ -10,5 +10,11 @@ import SickOrNotBackend.datatypes.Case;
  */
 public class CaseListingResult {
 
-    public List<Case> cases;
+    public final List<Case> cases;
+
+
+    public CaseListingResult(List<Case> cases) {
+        this.cases = cases;
+    }
+    
 }
