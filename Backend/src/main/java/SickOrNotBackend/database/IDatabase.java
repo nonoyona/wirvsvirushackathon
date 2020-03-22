@@ -66,5 +66,11 @@ public interface IDatabase {
     /**
      *
      */
-    public List<Case> getCases(String username, int startIndex, int resultCount);
+    public List<Case> getCases(String username, int startIndex, int caseCount);
+
+
+    public long getCount(String username);
+
+    public long getCount(String username, TestResult testResult);
+
 }
