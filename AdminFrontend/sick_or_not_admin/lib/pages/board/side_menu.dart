@@ -15,12 +15,8 @@ class SideMenu extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                "SickOrNot",
-                style: Style.title,
-              ),
-            ),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Image.asset("assets/logo.png")),
             SideMenuItem(
               title: "DASHBOARD",
               board: Boards.DASHBOARD,

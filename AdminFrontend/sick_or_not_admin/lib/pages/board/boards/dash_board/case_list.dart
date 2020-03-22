@@ -16,19 +16,22 @@ class CaseListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: height,
-      color: Style.getSurfaceColor(height),
-      child: Container(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            _ListItemItem(content: id),
-            _ListItemItem(content: date),
-            _ListItemItem(content: location),
-            _ListItemItem(content: state),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Card(
+        elevation: height,
+        color: Style.getSurfaceColor(height),
+        child: Container(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _ListItemItem(content: id),
+              _ListItemItem(content: date),
+              _ListItemItem(content: location),
+              _ListItemItem(content: state),
+            ],
+          ),
         ),
       ),
     );

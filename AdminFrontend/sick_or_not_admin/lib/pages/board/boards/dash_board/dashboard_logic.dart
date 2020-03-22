@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:sick_or_not_admin/SOSHost.dart';
 import 'package:sick_or_not_admin/logic/auth_logic.dart';
@@ -9,35 +10,54 @@ import 'package:http/http.dart' as http;
 class DashboardNotifier extends ChangeNotifier {
   final AuthNotifier auth;
 
-  
-
   List<CaseData> results = [];
+  int count = 0;
+  int sickCount = 0;
+  int healthyCount = 0;
 
   DashboardNotifier(this.auth) {
-    Map<String, String> requestHeaders = {
-       'Content-type': 'application/json',
-       'Authorization': '${auth.jsonWebToken}'
-     };
     Future.microtask(() async {
-      var value = await http.post(
-        "$host/cases",
-        headers: requestHeaders,
-        body: jsonEncode({
-          "caseCount": 200,
-          "startIndex": 0,
-        }),
-      );
-      print(value.statusCode);
-      if (value.statusCode == 200) {
-        var objects = (jsonDecode(value.body)["cases"] as List) ?? [];
-        print(objects);
-        this.results = objects.map((e) => CaseData.fromMap(e)).toList();
-        print(this.results);
-        notifyListeners();
-      } else {
-        auth.logOut();
-      }
+      await refresh();
     });
+  }
+
+  Future refresh() async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Authorization': '${auth.jsonWebToken}'
+    };
+    var value = await http.post(
+      "$host/cases",
+      headers: requestHeaders,
+      body: jsonEncode({
+        "caseCount": 200,
+        "startIndex": 0,
+      }),
+    );
+    print(value.statusCode);
+    if (value.statusCode == 200) {
+      var objects = (jsonDecode(value.body)["cases"] as List) ?? [];
+      print(objects);
+      this.results = objects.map((e) => CaseData.fromMap(e)).toList();
+      print(this.results);
+      notifyListeners();
+    } else {
+      auth.logOut();
+    }
+
+    value = await http.post(
+      "$host/count",
+      headers: requestHeaders,
+    );
+    if (value.statusCode == 200) {
+      var json = (jsonDecode(value.body));
+      this.count = json["count"];
+      this.healthyCount = json["negativeCount"];
+      this.sickCount = json["positiveCount"];
+      notifyListeners();
+    } else {
+      auth.logOut();
+    }
   }
 
   List<CaseData> getResults() {
@@ -81,7 +101,7 @@ class CaseData {
       'username': username,
       'location': location,
       'date': date,
-      'health': health.toString(),
+      'health': EnumToString.parse(health),
     };
   }
 
@@ -93,7 +113,7 @@ class CaseData {
       username: map['username'],
       location: map['location'],
       date: map['date'],
-      health: TestResult.values[map['health']],
+      health: EnumToString.fromString(TestResult.values, map['health']),
     );
   }
 

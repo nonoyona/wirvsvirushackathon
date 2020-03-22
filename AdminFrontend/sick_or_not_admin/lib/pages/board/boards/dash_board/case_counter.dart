@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sick_or_not_admin/pages/board/boards/dash_board/dashboard_logic.dart';
 import 'package:sick_or_not_admin/style.dart';
 
 class CaseCounters extends StatelessWidget {
@@ -6,13 +8,24 @@ class CaseCounters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var notifier = Provider.of<DashboardNotifier>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        _CaseCounter(caseType: "cases", count: 10000),
-        _CaseCounter(caseType: "sick", count: 5378),
-        _CaseCounter(caseType: "not", count: 1940,)
+        _CaseCounter(
+          caseType: "cases",
+          count: notifier.count,
+        ),
+        _CaseCounter(
+          caseType: "sick",
+          count: notifier.sickCount,
+        ),
+        _CaseCounter(
+          caseType: "not",
+          count: notifier.healthyCount,
+        )
       ],
     );
   }

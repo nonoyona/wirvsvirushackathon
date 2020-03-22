@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sick_or_not_admin/pages/board/boards/dash_board/case_counter.dart';
@@ -48,7 +49,7 @@ class Dashboard extends StatelessWidget {
             id: e.id,
             date: DateTime.fromMillisecondsSinceEpoch(e.date).toIso8601String(),
             location: e.location,
-            state: e.health.toString(),
+            state: EnumToString.parse(e.health),
           ),
         )
         .toList();
