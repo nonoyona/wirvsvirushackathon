@@ -12,7 +12,7 @@ Implementierung unserer Projekt-Einreichung im Rahmen des #WirVsVirusHack #WirVs
 Diese Anwendung hat den Zweck, die Vermittlung der Covid19-Testergebnisse von den Teststellen zu den Getesteten einfach und schnell über eine Webanwendung und einen eigenen, eindeutigen Identifier-Code zu realisieren. Dies löst das Problem der dauerhaft überfüllten Telefonwarteschlangen und sorgt somit dafür, dass der Testablauf im Allgemeinen verschnellert wird.
 
 ## Demo
-Das vollständige Vorstellungsvideo von SickOrNot findet man [hier](https://www.youtube.com/watch?v=xnTtKcy84I8) und eine Demo auf unserer<a href="https://sickornot.com">Website für Patienten</a>.
+Das vollständige Vorstellungsvideo von SickOrNot findet man [hier](https://www.youtube.com/watch?v=xnTtKcy84I8) und eine Demo auf unserer <a href="https://sickornot.com">Website für Patienten</a>.
 
 ## Autoren
 - [Noah Schmid](https://github.com/nonoyona): Backend Entwickler, Student der Informatik
