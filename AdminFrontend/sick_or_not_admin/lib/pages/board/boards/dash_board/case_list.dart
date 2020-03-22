@@ -1,4 +1,9 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sick_or_not_admin/pages/board/boards/case_modify/case_modification.dart';
+import 'package:sick_or_not_admin/pages/board/boards/dash_board/dashboard_logic.dart';
+import 'package:sick_or_not_admin/pages/board/logic/board_logic.dart';
 import 'package:sick_or_not_admin/style.dart';
 
 class CaseListItem extends StatelessWidget {
@@ -30,6 +35,39 @@ class CaseListItem extends StatelessWidget {
               _ListItemItem(content: date),
               _ListItemItem(content: location),
               _ListItemItem(content: state),
+              this.id != "ID"
+                  ? Expanded(
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          CaseModification.date = date;
+                          CaseModification.id = id;
+                          CaseModification.location = location;
+                          CaseModification.currentResult =
+                              EnumToString.fromString(TestResult.values, state);
+                          Provider.of<BoardNotifier>(context, listen: false)
+                              .changeBoard(Boards.UPDATE_CASE);
+                        },
+                      ),
+                    )
+                  : Expanded(
+                      child: IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "This functionality is not implemented yet",
+                              ),
+                              backgroundColor: Style.getSurfaceColor(10),
+                              elevation: 10,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
             ],
           ),
         ),

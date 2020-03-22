@@ -36,7 +36,7 @@ class CreateCaseNotifier extends ChangeNotifier {
   }
 
   void submit() async {
-    if (!submitted) {
+    if (!submitted && location != null && location.isNotEmpty) {
       submitted = true;
       Map<String, String> requestHeaders = {
       'Content-type': 'application/json',

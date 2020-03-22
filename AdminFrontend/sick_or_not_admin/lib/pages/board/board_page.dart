@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sick_or_not_admin/logic/auth_logic.dart';
+import 'package:sick_or_not_admin/pages/board/boards/case_modify/case_modification.dart';
 import 'package:sick_or_not_admin/pages/board/boards/create_case/case_creation.dart';
 import 'package:sick_or_not_admin/pages/board/boards/dash_board/dash_board.dart';
 import 'package:sick_or_not_admin/pages/board/boards/dash_board/dashboard_logic.dart';
@@ -16,7 +17,8 @@ class BoardPage extends StatelessWidget {
     return ChangeNotifierProvider<BoardNotifier>(
       create: (context) => BoardNotifier(),
       child: ChangeNotifierProvider<DashboardNotifier>(
-        create: (context) => DashboardNotifier(Provider.of<AuthNotifier>(context, listen: false)),
+        create: (context) => DashboardNotifier(
+            Provider.of<AuthNotifier>(context, listen: false)),
         child: Scaffold(
           backgroundColor: Style.surfaceColor,
           body: Row(
@@ -31,6 +33,8 @@ class BoardPage extends StatelessWidget {
                       return Dashboard();
                     case Boards.CREATE_CASE:
                       return CaseCreationBoard();
+                    case Boards.UPDATE_CASE:
+                      return CaseModification();
                     default:
                       return Center(
                           child: Text(

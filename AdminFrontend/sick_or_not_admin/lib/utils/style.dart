@@ -23,6 +23,7 @@ class FlutterStyle {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
+      
       bottomAppBarTheme: BottomAppBarTheme(elevation: 10),
       errorColor: colorScheme.error,
       buttonColor: colorScheme.secondary,
@@ -31,7 +32,7 @@ class FlutterStyle {
       focusColor: colorScheme.secondaryVariant,
       selectedRowColor: colorScheme.secondaryVariant,
       floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: getColorScheme().primaryVariant),
-      canvasColor: HexColor("FFFFFF"),
+      canvasColor: Style.getSurfaceColor(10),
       snackBarTheme: SnackBarThemeData(
         actionTextColor: colorScheme.primaryVariant,
         contentTextStyle:

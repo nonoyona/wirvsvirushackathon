@@ -59,6 +59,7 @@ class _SideMenuState extends State<SideMenu> {
                       onSubmitted: (value) {
                         notifier.setPassword(value);
                       },
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: Style.body,
