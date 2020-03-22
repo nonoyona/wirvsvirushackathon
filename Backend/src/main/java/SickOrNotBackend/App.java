@@ -32,14 +32,17 @@ public class App {
         authentication = new NewAuthentication(client);
         Javalin app = Javalin.create().start(8080);
         app.before(ctx -> {
-            String origin =  ctx.header("Origin");
+            String origin = ctx.header("Origin");
             System.out.println(origin + "has connected");
             if (origin == null) {
                 origin = "http://localhost:3000/";
             }
-            
+            ctx.header("Access-Control-Allow-Credentials", "true");
             ctx.header("Access-Control-Allow-Origin", origin);
+            ctx.header("Access-Control-Allow-Methods", "GET, POST");
+            ctx.header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Requested-With");
         });
+        app.options("/*", ctx -> ctx.status(200).json("OK"));
         app.get("/", new TestHandler());
         app.get("/result/:id", new TestResultReceivingHandler());
         app.post("/cases", new CaseListingHandler());

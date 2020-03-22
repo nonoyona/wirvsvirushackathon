@@ -9,34 +9,38 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-      child: ListView(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            child: CaseCounters(),
+    return Consumer<DashboardNotifier>(
+      builder: (context, notifier, child) {
+        return Container(
+          padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: CaseCounters(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              CaseListItem(
+                id: "ID",
+                date: "Date",
+                location: "Location",
+                state: "Test result",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ]..addAll(getCases(context, notifier)),
           ),
-          SizedBox(
-            height: 20,
-          ),
-          CaseListItem(
-            id: "ID",
-            date: "Date",
-            location: "Location",
-            state: "Test result",
-          ),
-          SizedBox(
-            height: 10,
-          ),
-        ]..addAll(getCases(context)),
-      ),
+        );
+      }
     );
   }
 
-  List<Widget> getCases(BuildContext context) {
+  List<Widget> getCases(BuildContext context, DashboardNotifier notifier) {
 
-    var result = Provider.of<DashboardNotifier>(context).getResults();
+    var result = notifier.getResults();
 
     return result
         .map(

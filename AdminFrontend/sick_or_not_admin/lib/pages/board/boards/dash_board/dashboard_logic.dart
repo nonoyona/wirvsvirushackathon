@@ -9,22 +9,30 @@ import 'package:http/http.dart' as http;
 class DashboardNotifier extends ChangeNotifier {
   final AuthNotifier auth;
 
+  
+
   List<CaseData> results = [];
 
   DashboardNotifier(this.auth) {
+    Map<String, String> requestHeaders = {
+       'Content-type': 'application/json',
+       'Authorization': '${auth.jsonWebToken}'
+     };
     Future.microtask(() async {
       var value = await http.post(
         "$host/cases",
-        headers: {"Authorization": auth.jsonWebToken},
+        headers: requestHeaders,
         body: jsonEncode({
           "caseCount": 200,
           "startIndex": 0,
         }),
       );
-
-      if (value.statusCode == HttpStatus.accepted) {
-        var objects = (jsonDecode(value.body)["cases"] as List);
+      print(value.statusCode);
+      if (value.statusCode == 200) {
+        var objects = (jsonDecode(value.body)["cases"] as List) ?? [];
+        print(objects);
         this.results = objects.map((e) => CaseData.fromMap(e)).toList();
+        print(this.results);
         notifyListeners();
       } else {
         auth.logOut();
@@ -77,7 +85,7 @@ class CaseData {
     };
   }
 
-  static CaseData fromMap(Map<String, dynamic> map) {
+  static CaseData fromMap(Map map) {
     if (map == null) return null;
 
     return CaseData(
