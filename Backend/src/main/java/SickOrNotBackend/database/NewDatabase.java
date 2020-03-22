@@ -91,7 +91,7 @@ public class NewDatabase implements IDatabase {
                 .limit(caseCount);
         List<Case> list = new LinkedList<>();
         for (Document doc : results) {
-            list.add(new Case(doc.getString("id"), doc.getString("username"), doc.getDate("date"),
+            list.add(new Case(doc.getString("id"), doc.getString("username"), new Date(doc.getLong("date")),
                     doc.getString("location"), TestResult.valueOf(doc.getString("health"))));
         }
         return list;

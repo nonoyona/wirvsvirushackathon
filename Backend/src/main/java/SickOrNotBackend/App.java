@@ -25,19 +25,29 @@ public class App {
     public static IAuthentication authentication;
 
     public static void main(String[] args) {
-        var client =  MongoClients.create("mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false");
+        var client = MongoClients.create(
+                "mongodb://development:SWtxXHaxr7WW6eXb@db01.dev.schaefkn.com:27017/?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false");
+        // var client = MongoClients.create();
         database = new NewDatabase(client);
         authentication = new NewAuthentication(client);
         Javalin app = Javalin.create().start(8080);
+        app.before(ctx -> {
+            String origin =  ctx.header("Origin");
+            System.out.println(origin + "has connected");
+            if (origin == null) {
+                origin = "http://localhost:3000/";
+            }
+            
+            ctx.header("Access-Control-Allow-Origin", origin);
+        });
         app.get("/", new TestHandler());
         app.get("/result/:id", new TestResultReceivingHandler());
-        app.get("/cases", new CaseListingHandler());
-        app.get("/count", new CaseCountHandler());
+        app.post("/cases", new CaseListingHandler());
+        app.post("/count", new CaseCountHandler());
         app.post("/create", new CaseCreationHandler());
         app.post("/result/:id", new TestResultRegisteringHandler());
         app.post("/login", new LogInHandler());
         app.post("/register", new RegisterUserHandler());
 
-        
     }
 }

@@ -38,7 +38,7 @@ public class NewAuthentication implements IAuthentication {
             var data = this.getAuthDataByUsername(username);
             try {
                 if (Crypto.checkPassword(password, new HashData(data.passwordHash, data.passwordSalt))) {
-                    var result = JWTHandler.createJWT(data.username, data.roll, 60 * 1000 * 15);
+                    var result = JWTHandler.createJWT(data.username, data.roll, 60 * 1000 * 60);
                     return result;
                 } else {
                     throw new AccessControlException("Auth failed");
