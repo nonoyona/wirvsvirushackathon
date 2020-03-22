@@ -75,11 +75,8 @@ public class NewDatabase implements IDatabase {
             throw new NullPointerException("No Case with id found");
         }
         try {
-            return new Case(doc.getString("id"), 
-            doc.getString("username"), 
-            new Date(doc.getLong("date")),
-                    doc.getString("location"), 
-                    TestResult.valueOf(doc.getString("health")));
+            return new Case(doc.getString("id"), doc.getString("username"), new Date(doc.getLong("date")),
+                    doc.getString("location"), TestResult.valueOf(doc.getString("health")));
         } catch (ClassCastException e) {
             e.printStackTrace();
             // Should not happen because this database contains only Cases
@@ -89,14 +86,25 @@ public class NewDatabase implements IDatabase {
     }
 
     @Override
-    public List<Case> getCases(String username, int startIndex, int resultCount) {
-        var results = collection.find(Filters.eq("username", username)).sort(Sorts.descending("date")).skip(startIndex).limit(resultCount);
+    public List<Case> getCases(String username, int startIndex, int caseCount) {
+        var results = collection.find(Filters.eq("username", username)).sort(Sorts.descending("date")).skip(startIndex)
+                .limit(caseCount);
         List<Case> list = new LinkedList<>();
-        for (Document doc : results){
-            list.add(new Case(doc.getString("id"), doc.getString("username"), doc.getDate("date"), doc.getString("location"),
-                    TestResult.valueOf(doc.getString("health"))));
+        for (Document doc : results) {
+            list.add(new Case(doc.getString("id"), doc.getString("username"), doc.getDate("date"),
+                    doc.getString("location"), TestResult.valueOf(doc.getString("health"))));
         }
         return list;
+    }
+
+    @Override
+    public long getCount(String username) {
+        return collection.countDocuments(Filters.eq("username", username));
+    }
+
+    @Override
+    public long getCount(String username, TestResult testResult) {
+        return collection.countDocuments(Filters.and(Filters.eq("username", username), Filters.eq("health", testResult.toString())));
     }
 
 }
